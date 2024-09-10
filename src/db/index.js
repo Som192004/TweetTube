@@ -5,11 +5,11 @@ const connectDB = async () => {
     try{
         const connectionInstance = await mongoose.connect(process.env.MONGODB_URI)
         console.log(`\n mongodb connected `);
-        console.log(connectionInstance);
+        // console.log(connectionInstance);
     }catch(err){
         console.log("MongoDB Connection Error . . . ") ;
         console.log(err);
-        // process.exit(1) ;
+        process.exit(1) ;
     }
 }
 
