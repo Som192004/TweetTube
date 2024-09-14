@@ -17,6 +17,8 @@ import fs from "fs"
                 resource_type:"auto"
             })
             console.log("File Uploaded On Cloudinary . . .",res.url)
+            fs.unlink(localFilePath)
+            
             return res.url;
         }catch(err){
             //It will remove the file from the server when upload is failed . . .
