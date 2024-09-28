@@ -5,9 +5,8 @@ import {uploadOnCloudinary} from "../utils/CloudinaryUtility.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
+import fs from "fs" 
 
-//Todo : 
-//Required the deletion of an image after uploading the image to the cloudinary . . .
 
 const registerUser = asyncHandler(async (req,res) => {
     //steps : 
@@ -130,8 +129,8 @@ const logoutUser = asyncHandler(async(req,res) => {
     await User.findByIdAndUpdate(
         req.user._id , 
         {
-            $set : {
-                refreshToken : undefined
+            $set: {
+                refreshToken: null  // Use null instead of undefined to clear
             },
         },
             {
@@ -254,6 +253,14 @@ const updateAvatar = asyncHandler(async (req,res) => {
         throw new ApiError(400 , "Error while uploading the file on the cloudinary")
     }
 
+    fs.unlink(avatarPath, (err) => {
+        if (err) {
+            console.error(`Failed to delete uploaded avatar: ${err.message}`);
+        } else {
+            console.log('Uploaded avatar deleted successfully from server');
+        }
+    });
+
     const user = await User.findByIdAndUpdate(req.user?._id ,
     {
         $set : {
@@ -280,6 +287,14 @@ const updateCoverImg = asyncHandler(async (req,res) => {
     if(!coverImg.url){
         throw new ApiError(400 , "Error while uploading coverImg on cloudinary")
     }
+    fs.unlink(coverImgPath, (err) => {
+        if (err) {
+            console.error(`Failed to delete uploaded avatar: ${err.message}`);
+        } else {
+            console.log('Uploaded avatar deleted successfully from server');
+        }
+    });
+
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
@@ -414,7 +429,6 @@ const getWatchHistory = asyncHandler(async(req,res) => {
         new ApiResponse(200 , user[0].watchHistory , "Watch History fetched Successfully")
     )
 })
-
 
 
 export {registerUser , login , logoutUser ,refreshAccessToken , updateUserPassword , getUserInfo , updateAccountInfo ,updateAvatar ,updateCoverImg , getUserChannelInfo,

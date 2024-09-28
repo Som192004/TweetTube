@@ -30,7 +30,7 @@ router.route("/update-user-info").patch(verifyJWT , updateAccountInfo)
 
 router.route("/update-user-avatar").patch(verifyJWT , upload.single("avatar") , updateAvatar)
 
-router.route("/cover-img" , verifyJWT , upload.single("/coverImage") , updateCoverImg)
+router.route("/cover-img" , verifyJWT , upload.single("coverImage") , updateCoverImg)
 
 router.route("/channel/:username").get(verifyJWT , getUserChannelInfo)
 
